@@ -96,6 +96,16 @@ func (s *Changelog) ContainsField(candidates ...string) bool {
 	return false
 }
 
+// ChangeLog returns ChangelogItem if Changelog has the field of candidate
+func (s *Changelog) ChangeLogItem(candidate string) *ChangelogItem {
+	for i := 0; i < len(s.Items); i++ {
+		if s.Items[i].Field == candidate {
+			return &s.Items[i]
+		}
+	}
+	return nil
+}
+
 // ChangelogItem is an item of Changelog
 type ChangelogItem struct {
 	Field string `json:"field"`

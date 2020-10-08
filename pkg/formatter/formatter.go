@@ -72,6 +72,16 @@ func (f *Formatter) JIRAEventToSlackMessage(event *jira.Event) *slack.Message {
 				Timestamp: event.UnixTime(),
 			}},
 		}
+    case event.IsIssueFieldUpdated("status"):
+        changeLog := event.Changelog.ChangeLogItem("status")
+		return &slack.Message{
+			Text: f.text(event, fmt.Sprintf("status updated to %s", changeLog.To), f.mentions(event.Issue.Fields.Description)),
+			Attachments: []slack.Attachment{{
+				Title:     f.title(event),
+				TitleLink: event.Issue.BrowserURL(),
+				Timestamp: event.UnixTime(),
+			}},
+		}
 	case event.IsIssueDeleted():
 		return &slack.Message{
 			Text: f.text(event, "deleted", ""),
